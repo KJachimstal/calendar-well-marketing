@@ -16,13 +16,15 @@ import {
   ViewSwitcher,
   WeekView
 } from '@devexpress/dx-react-scheduler-material-ui'
+
+/* --------------------------------- Locales -------------------------------- */
 import { formLocalizationPL } from '../../locales/formLocalizationPL'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Calendar                                  */
 /* -------------------------------------------------------------------------- */
 const Calendar = ({
-  data,
+  appointments,
   selectedViewName,
   addedAppointment,
   appointmentChanges,
@@ -40,7 +42,7 @@ const Calendar = ({
   return (
     <Paper>
         <Scheduler
-          data={data}
+          data={appointments}
           locale={'pl-PL'}
         >
           <ViewState
@@ -76,6 +78,8 @@ const Calendar = ({
           />
           <AppointmentForm
             messages={formLocalizationPL}
+            recurrenceLayoutComponent={() => (<></>)}
+            booleanEditorComponent={(data) => {console.log(data)}}
           />
         </Scheduler>
       </Paper>

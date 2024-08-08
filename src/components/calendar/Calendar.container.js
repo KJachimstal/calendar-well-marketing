@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 /* ------------------------------- Components ------------------------------- */
 import Calendar from './Calendar'
 
-import { appointments } from '../../appointments'
+import { appointments as appoint } from '../../appointments'
+import { useGetAppointmentsQuery } from '../../redux/service/appointments'
 
 /* -------------------------------------------------------------------------- */
 /*                             Calendar Container                             */
@@ -13,8 +14,9 @@ const CalendarContainer = () => {
   const [addedAppointment, setAddedAppointment] = useState({})
   const [appointmentChanges, setAppointmentChanges] = useState({})
   const [editingAppointment, setEditingAppointment] = useState({})
-  const [data, setData] = useState(appointments)
+  const [appointments, setAppointments] = useState(appoint)
   const [currentDate, setCurrentDate] = useState("2018-07-25")
+  const {data, error} = useGetAppointmentsQuery()
 
   const currentDateChange = (date) => {
     setCurrentDate(date)
@@ -39,7 +41,7 @@ const CalendarContainer = () => {
 
   const commitChanges = ({ added, changed, deleted }) => {
     console.log("commitChanges - ",added, changed, deleted)
-    let newData = data
+    let newData = appointments
     if (added) {
       const startingAddedId = newData.length > 0 ? newData[newData.length - 1].id + 1 : 0;
       newData = [...newData, { id: startingAddedId, ...added }];
@@ -52,13 +54,13 @@ const CalendarContainer = () => {
       newData = newData.filter(appointment => appointment.id !== deleted);
     }
 
-    setData(newData);
+    setAppointments(newData);
   }
 
   /* --------------------------------- Render --------------------------------- */
   return (
     <Calendar {...{
-      data,
+      appointments,
       selectedViewName,
       addedAppointment,
       appointmentChanges,
