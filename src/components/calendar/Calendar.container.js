@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 /* ------------------------------- Components ------------------------------- */
 import Calendar from './Calendar'
 
-import { appointments as appoint } from '../../appointments'
+/* ----------------------------------- API ---------------------------------- */
+import { fetchAppointments }  from '../../api/api'
 
 /* -------------------------------------------------------------------------- */
 /*                             Calendar Container                             */
@@ -13,8 +14,13 @@ const CalendarContainer = () => {
   const [addedAppointment, setAddedAppointment] = useState({})
   const [appointmentChanges, setAppointmentChanges] = useState({})
   const [editingAppointment, setEditingAppointment] = useState({})
-  const [appointments, setAppointments] = useState(appoint)
+  const [appointments, setAppointments] = useState([])
   const [currentDate, setCurrentDate] = useState("2018-07-25")
+
+
+  useEffect(() => {
+    fetchAppointments().then((appointments) => setAppointments(appointments))
+  }, [])
 
   const currentDateChange = (date) => {
     setCurrentDate(date)
