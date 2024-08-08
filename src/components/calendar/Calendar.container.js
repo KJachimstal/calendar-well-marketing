@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import Calendar from './Calendar'
 
 import { appointments as appoint } from '../../appointments'
-import { useGetAppointmentsQuery } from '../../redux/service/appointments'
 
 /* -------------------------------------------------------------------------- */
 /*                             Calendar Container                             */
@@ -16,7 +15,6 @@ const CalendarContainer = () => {
   const [editingAppointment, setEditingAppointment] = useState({})
   const [appointments, setAppointments] = useState(appoint)
   const [currentDate, setCurrentDate] = useState("2018-07-25")
-  const {data, error} = useGetAppointmentsQuery()
 
   const currentDateChange = (date) => {
     setCurrentDate(date)
@@ -40,7 +38,7 @@ const CalendarContainer = () => {
   }
 
   const commitChanges = ({ added, changed, deleted }) => {
-    console.log("commitChanges - ",added, changed, deleted)
+    console.log("commitChanges - ", added, changed, deleted)
     let newData = appointments
     if (added) {
       const startingAddedId = newData.length > 0 ? newData[newData.length - 1].id + 1 : 0;

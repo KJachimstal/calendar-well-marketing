@@ -4,6 +4,7 @@ import React from 'react'
 import { Paper } from '@mui/material'
 import { EditingState, IntegratedEditing, ViewState } from '@devexpress/dx-react-scheduler'
 import {
+  AllDayPanel,
   AppointmentForm,
   Appointments,
   AppointmentTooltip,
@@ -66,6 +67,7 @@ const Calendar = ({
           <WeekView displayName='Tygodniowy'/>
           <MonthView displayName='Miesięczny' />
 
+          <AllDayPanel messages={{ allDay: "Cały dzień"}}/>
           <Toolbar />
           <DateNavigator />
           <TodayButton messages={{ today: "Dzisiaj"}}/>
@@ -79,7 +81,7 @@ const Calendar = ({
           <AppointmentForm
             messages={formLocalizationPL}
             recurrenceLayoutComponent={() => (<></>)}
-            booleanEditorComponent={(data) => {console.log(data)}}
+            booleanEditorComponent={(data) => data.label === "Cały dzień" ? console.log(data) : <></>}
           />
         </Scheduler>
       </Paper>
