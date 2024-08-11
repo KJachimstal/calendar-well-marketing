@@ -1,84 +1,84 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 /* ------------------------------- Components ------------------------------- */
-import Calendar from './Calendar'
+import Calendar from "./Calendar";
 
 /* ----------------------------------- API ---------------------------------- */
-import { fetchAppointments }  from '../../api/api'
+import {
+  createAppointment,
+  deleteAppointment,
+  fetchAppointments,
+  updateAppointment,
+} from "../../api/api";
 
 /* -------------------------------------------------------------------------- */
 /*                             Calendar Container                             */
 /* -------------------------------------------------------------------------- */
 const CalendarContainer = () => {
-  const [selectedViewName, setSelectedViewName] = useState('Week')
-  const [addedAppointment, setAddedAppointment] = useState({})
-  const [appointmentChanges, setAppointmentChanges] = useState({})
-  const [editingAppointment, setEditingAppointment] = useState({})
-  const [appointments, setAppointments] = useState([])
-  const [currentDate, setCurrentDate] = useState("2018-07-25")
+  const [selectedViewName, setSelectedViewName] = useState("Week");
+  const [editingAppointment, setEditingAppointment] = useState({});
+  const [appointments, setAppointments] = useState([]);
+  const [currentDate, setCurrentDate] = useState("2018-07-25");
 
+  const loadAppointments = () => {
+    fetchAppointments().then((appointments) => setAppointments(appointments));
+  };
 
   useEffect(() => {
-    fetchAppointments().then((appointments) => setAppointments(appointments))
-  }, [])
+    loadAppointments();
+  }, []);
 
   const currentDateChange = (date) => {
-    setCurrentDate(date)
-  }
+    setCurrentDate(date);
+  };
 
   const changeSelectedViewName = (viewName) => {
-    setSelectedViewName(viewName)
-  }
+    setSelectedViewName(viewName);
+  };
 
-  const changeAddedAppointment = (data) => {
-    console.log("Added - ", data)
-    setAddedAppointment(data)
-  }
-  const changeAppointmentChanges = (data) => {
-    console.log("Change - ", data)
-    setAppointmentChanges(data)
-  }
   const changeEditingAppointment = (data) => {
-    console.log("Edit - ", data)
-    setEditingAppointment(data)
-  }
+    console.log("Edit - ", data);
+    setEditingAppointment(data);
+  };
 
   const commitChanges = ({ added, changed, deleted }) => {
-    console.log("commitChanges - ", added, changed, deleted)
-    let newData = appointments
     if (added) {
-      const startingAddedId = newData.length > 0 ? newData[newData.length - 1].id + 1 : 0;
-      newData = [...newData, { id: startingAddedId, ...added }];
-    }
-    if (changed) {
-      newData = newData.map(appointment => (
-        changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
-    }
-    if (deleted !== undefined) {
-      newData = newData.filter(appointment => appointment.id !== deleted);
+      createAppointment({
+        ...added,
+        startDate: added.startDate.toISOString(),
+        endDate: added.endDate.toISOString(),
+      }).then(() => loadAppointments());
     }
 
-    setAppointments(newData);
-  }
+    if (changed) {
+      console.log(changed);
+      updateAppointment(
+        { ...editingAppointment, ...changed[editingAppointment.id] },
+        editingAppointment.id
+      ).then(() => loadAppointments());
+    }
+
+    if (deleted !== undefined) {
+      console.log(deleted);
+      deleteAppointment(deleted).then(() => loadAppointments());
+    }
+  };
 
   /* --------------------------------- Render --------------------------------- */
   return (
-    <Calendar {...{
-      appointments,
-      selectedViewName,
-      addedAppointment,
-      appointmentChanges,
-      editingAppointment,
-      currentDate,
-      commitChanges,
-      changeSelectedViewName,
-      changeAddedAppointment,
-      changeAppointmentChanges,
-      changeEditingAppointment,
-      currentDateChange,
-    }}
+    <Calendar
+      {...{
+        appointments,
+        selectedViewName,
+        editingAppointment,
+        currentDate,
+        commitChanges,
+        changeSelectedViewName,
+        changeEditingAppointment,
+        currentDateChange,
+      }}
     />
-  )
-}
+  );
+};
 
-export default CalendarContainer
+export default CalendarContainer;

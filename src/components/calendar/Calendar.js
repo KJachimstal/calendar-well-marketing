@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 
 /* ------------------------------- Components ------------------------------- */
-import { Paper } from '@mui/material'
-import { EditingState, IntegratedEditing, ViewState } from '@devexpress/dx-react-scheduler'
+import { Paper } from "@mui/material";
+import { EditingState, ViewState } from "@devexpress/dx-react-scheduler";
 import {
   AllDayPanel,
   AppointmentForm,
@@ -10,16 +10,17 @@ import {
   AppointmentTooltip,
   DateNavigator,
   DayView,
+  EditRecurrenceMenu,
   MonthView,
   Scheduler,
   TodayButton,
   Toolbar,
   ViewSwitcher,
-  WeekView
-} from '@devexpress/dx-react-scheduler-material-ui'
+  WeekView,
+} from "@devexpress/dx-react-scheduler-material-ui";
 
 /* --------------------------------- Locales -------------------------------- */
-import { formLocalizationPL } from '../../locales/formLocalizationPL'
+import { formLocalizationPL } from "../../locales/formLocalizationPL";
 
 /* -------------------------------------------------------------------------- */
 /*                                  Calendar                                  */
@@ -27,65 +28,49 @@ import { formLocalizationPL } from '../../locales/formLocalizationPL'
 const Calendar = ({
   appointments,
   selectedViewName,
-  addedAppointment,
-  appointmentChanges,
   editingAppointment,
   currentDate,
   commitChanges,
   changeSelectedViewName,
-  changeAddedAppointment,
-  changeAppointmentChanges,
   changeEditingAppointment,
   currentDateChange,
 }) => {
-
   /* --------------------------------- Render --------------------------------- */
   return (
-    <Paper>
-        <Scheduler
-          data={appointments}
-          locale={'pl-PL'}
-        >
-          <ViewState
-            currentDate={currentDate}
-            onCurrentDateChange={currentDateChange}
-            currentViewName={selectedViewName}
-            onCurrentViewNameChange={changeSelectedViewName}
-          />
-          <EditingState
-            onCommitChanges={commitChanges}
-            addedAppointment={addedAppointment}
-            onAddedAppointmentChange={changeAddedAppointment}
-            appointmentChanges={appointmentChanges}
-            onAppointmentChangesChange={changeAppointmentChanges}
-            editingAppointment={editingAppointment}
-            onEditingAppointmentChange={changeEditingAppointment}
-          />
-          <IntegratedEditing />
+    <Paper style={{ height: "100vh" }}>
+      <Scheduler data={appointments} locale={"pl-PL"}>
+        <ViewState
+          currentDate={currentDate}
+          onCurrentDateChange={currentDateChange}
+          currentViewName={selectedViewName}
+          onCurrentViewNameChange={changeSelectedViewName}
+        />
+        <EditingState
+          onCommitChanges={commitChanges}
+          editingAppointment={editingAppointment}
+          onEditingAppointmentChange={changeEditingAppointment}
+        />
+        <EditRecurrenceMenu />
 
-          <DayView displayName='Dzienny' />
-          <WeekView displayName='Tygodniowy'/>
-          <MonthView displayName='Miesięczny' />
+        <DayView displayName="Dzienny" />
+        <WeekView displayName="Tygodniowy" />
+        <MonthView displayName="Miesięczny" />
 
-          <AllDayPanel messages={{ allDay: "Cały dzień"}}/>
-          <Toolbar />
-          <DateNavigator />
-          <TodayButton messages={{ today: "Dzisiaj"}}/>
-          <ViewSwitcher />
-          <Appointments />
-          <AppointmentTooltip
-            showCloseButton
-            showOpenButton
-            showDeleteButton
-          />
-          <AppointmentForm
-            messages={formLocalizationPL}
-            recurrenceLayoutComponent={() => (<></>)}
-            booleanEditorComponent={(data) => data.label === "Cały dzień" ? console.log(data) : <></>}
-          />
-        </Scheduler>
-      </Paper>
-  )
-}
+        <AllDayPanel messages={{ allDay: "Cały dzień" }} />
+        <Toolbar />
+        <DateNavigator />
+        <TodayButton messages={{ today: "Dzisiaj" }} />
+        <ViewSwitcher />
+        <Appointments />
+        <AppointmentTooltip showCloseButton showOpenButton showDeleteButton />
+        <AppointmentForm
+          messages={formLocalizationPL}
+          // recurrenceLayoutComponent={() => (<></>)}
+          // booleanEditorComponent={(data) => data.label === "Cały dzień" ? console.log(data) : <></>}
+        />
+      </Scheduler>
+    </Paper>
+  );
+};
 
-export default Calendar
+export default Calendar;
