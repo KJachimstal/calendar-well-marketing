@@ -20,7 +20,6 @@ export const fetchAppointments = async () => {
 };
 
 export const createAppointment = async (appointment) => {
-  console.log("Create app - ", appointment);
   const db = getDatabase(app);
   const dbRef = push(ref(db, "appointments"));
   set(dbRef, appointment)

@@ -20,7 +20,7 @@ import {
 } from "@devexpress/dx-react-scheduler-material-ui";
 
 /* --------------------------------- Locales -------------------------------- */
-import { formLocalizationPL } from "../../locales/formLocalizationPL";
+import { formLocalization, recurrenceMenuLocalization } from "../../locales/localization";
 
 /* -------------------------------------------------------------------------- */
 /*                                  Calendar                                  */
@@ -50,7 +50,7 @@ const Calendar = ({
           editingAppointment={editingAppointment}
           onEditingAppointmentChange={changeEditingAppointment}
         />
-        <EditRecurrenceMenu />
+        <EditRecurrenceMenu messages={recurrenceMenuLocalization} />
 
         <DayView displayName="Dzienny" />
         <WeekView displayName="Tygodniowy" />
@@ -64,9 +64,13 @@ const Calendar = ({
         <Appointments />
         <AppointmentTooltip showCloseButton showOpenButton showDeleteButton />
         <AppointmentForm
-          messages={formLocalizationPL}
-          // recurrenceLayoutComponent={() => (<></>)}
-          // booleanEditorComponent={(data) => data.label === "Cały dzień" ? console.log(data) : <></>}
+          messages={formLocalization}
+          booleanEditorComponent={(props) => {
+            if (props.label === "Powtarzaj") {
+              return null;
+            }
+            return <AppointmentForm.BooleanEditor {...props} />;
+          }}
         />
       </Scheduler>
     </Paper>

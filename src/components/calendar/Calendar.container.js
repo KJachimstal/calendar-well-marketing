@@ -37,7 +37,6 @@ const CalendarContainer = () => {
   };
 
   const changeEditingAppointment = (data) => {
-    console.log("Edit - ", data);
     setEditingAppointment(data);
   };
 
@@ -51,7 +50,6 @@ const CalendarContainer = () => {
     }
 
     if (changed) {
-      console.log(changed);
       updateAppointment(
         { ...editingAppointment, ...changed[editingAppointment.id] },
         editingAppointment.id
@@ -59,7 +57,6 @@ const CalendarContainer = () => {
     }
 
     if (deleted !== undefined) {
-      console.log(deleted);
       deleteAppointment(deleted).then(() => loadAppointments());
     }
   };
